@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sleep Wind-Down Deck</title>
+<meta name="theme-color" content="#1F2A44">
+<meta name="description" content="Sleep Wind-Down Deck: 80 quiet cards for bedtime and for 2 a.m. Draw one, do one small thing.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<style>@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/AtkinsonHyperlegible-0.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'Atkinson Hyperlegible';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/AtkinsonHyperlegible-1.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:500;font-display:swap;src:url(fonts/DMSans-2.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:'DM Sans';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/DMSans-2.woff2) format('woff2');unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+</style>
+<style>
+/* Layout concept: one calm column on deep navy. The pastel cards are the only color, so they read first. */
+:root{
+  --navy:#1F2A44; --navy2:#2A3659; --paper:#F7F2E9; --muted:#B9C0D3; --peach:#F7D58B; --ink:#2C3956;
+  --line:rgba(247,242,233,.18);
+  --font-display:'DM Sans',system-ui,sans-serif; --font-body:'Atkinson Hyperlegible',system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;background:var(--navy);color:var(--paper);font-family:var(--font-body);font-size:18px;line-height:1.45;
+  padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+#app{max-width:460px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+.screen{flex:1;display:flex;flex-direction:column;gap:18px;padding-block:14px 26px}
+.screen[hidden]{display:none}
+.top{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.brand{font-family:var(--font-display);font-weight:700;letter-spacing:.2em;text-transform:uppercase;font-size:.8rem;color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:10px 4px;min-height:44px}
+:focus-visible{outline:3px solid var(--peach);outline-offset:3px;border-radius:8px}
+[tabindex="-1"]:focus{outline:none}
+h1,h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin:0}
+h2{font-size:1.5rem}
+p{margin:0}
+.small{color:var(--muted);font-size:.9rem}
+
+/* home */
+.center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding-block:6px}
+.boost{position:relative;width:min(62vw,250px);aspect-ratio:1;border-radius:50%;border:0;background:var(--peach);color:var(--ink);
+  font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,7vw,2rem);letter-spacing:.14em;
+  box-shadow:0 0 0 14px rgba(247,213,139,.16),0 0 0 32px rgba(247,213,139,.08);}
+.boost:active{transform:scale(.97)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 14px rgba(247,213,139,.16),0 0 0 32px rgba(247,213,139,.08)}50%{box-shadow:0 0 0 20px rgba(247,213,139,.14),0 0 0 42px rgba(247,213,139,.06)}}
+.hint{color:var(--muted);text-align:center}
+.toggle{display:flex;gap:14px;align-items:center;background:var(--navy2);border-radius:16px;padding:14px 16px;cursor:pointer;min-height:64px}
+.toggle input{position:absolute;opacity:0;pointer-events:none}
+.knob{flex:none;width:52px;height:30px;border-radius:99px;background:#4A5778;position:relative;transition:background .2s}
+.knob::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:var(--paper);transition:transform .2s}
+.toggle input:checked+.knob{background:#A9B8E8}
+.toggle input:checked+.knob::after{transform:translateX(22px)}
+.toggle input:focus-visible+.knob{outline:3px solid var(--peach);outline-offset:3px}
+.toggle b{display:block;font-family:var(--font-display)}
+.toggle small{color:var(--muted);font-size:.85rem;line-height:1.3;display:block}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{min-height:52px;border-radius:14px;border:1.5px solid var(--line);background:transparent;padding:10px 12px;font-family:var(--font-display);font-weight:700;font-size:.95rem;line-height:1.2}
+.btn.primary{background:var(--peach);color:var(--ink);border-color:var(--peach)}
+.btn.full{grid-column:1/-1}
+.btn:active{transform:scale(.98)}
+.btn small{font-weight:400;font-family:var(--font-body);color:inherit;opacity:.85;font-size:.85rem}
+
+/* card + flip */
+.stage{display:flex;justify-content:center;perspective:1200px}
+.flip{position:relative;width:min(80vw,330px);aspect-ratio:63/88}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .7s cubic-bezier(.3,.7,.2,1)}
+.flip .f-back{transform:rotateY(0)}
+.flip .f-front{transform:rotateY(180deg)}
+.flip.shown .f-back{transform:rotateY(-180deg)}
+.flip.shown .f-front{transform:rotateY(0)}
+.cw{container-type:inline-size;width:100%;height:100%}
+.card{width:100%;height:100%;background:var(--bg);color:var(--ink);border-radius:4.8cqw;overflow:hidden;position:relative;font-family:var(--font-body);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.bgart{position:absolute;inset:0;width:100%;height:100%;display:block}
+.grainov{position:absolute;inset:0;background-image:var(--grain);background-size:200px 200px}
+.in{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:6cqw 6.5cqw 6cqw}
+.hd{display:flex;justify-content:space-between;align-items:flex-start}
+.nm{font-family:var(--font-display);font-weight:700;font-size:3.8cqw;letter-spacing:.22em;text-transform:uppercase;padding-top:1.2cqw}
+.no{font-family:var(--font-display);font-weight:700;font-size:11cqw;line-height:1}
+.ttl{font-family:var(--font-display);font-weight:700;line-height:1;letter-spacing:-.025em;margin-top:9cqw;text-wrap:balance;font-size:13cqw}
+.txt{font-size:5.4cqw;line-height:1.34;margin-top:4.2cqw;text-wrap:pretty;max-width:50cqw}
+.sp{flex:1}
+.ft{display:flex;justify-content:space-between;align-items:center}
+.pill{font-family:var(--font-display);font-weight:700;font-size:4.6cqw;background:var(--ink);color:var(--paper);border-radius:99px;padding:1.4cqw 4cqw;white-space:nowrap}
+.tg{width:9.5cqw;height:9.5cqw;border-radius:50%;border:.6cqw solid var(--ink);display:grid;place-items:center}
+.tg svg{width:5.6cqw;height:5.6cqw;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.back{width:100%;height:100%;border-radius:4.8cqw;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.back svg{width:100%;height:100%;display:block}
+
+/* timer */
+.timer{display:flex;align-items:center;justify-content:center;gap:16px;min-height:76px}
+.ring{position:relative;width:76px;height:76px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:rgba(247,242,233,.16)}
+.ring .fg{stroke:var(--peach);stroke-linecap:round}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:1rem}
+.msg{text-align:center;color:var(--muted);min-height:1.5em}
+.dots{display:flex;justify-content:center;gap:8px}
+.dots[hidden]{display:none}
+.dots i{width:10px;height:10px;border-radius:50%;background:rgba(247,242,233,.25)}
+.dots i.on{background:var(--peach)}
+.actions{display:flex;flex-direction:column;gap:10px}
+
+/* deck + about */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.tab{flex:none;min-height:44px;padding:8px 16px;border-radius:99px;border:1.5px solid var(--line);background:transparent;font-family:var(--font-display);font-weight:700;display:flex;gap:8px;align-items:center}
+.tab[aria-selected="true"]{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.tab i{width:14px;height:14px;border-radius:50%;display:block}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tile{border:0;background:none;padding:0;aspect-ratio:63/88;border-radius:5cqw;text-align:left}
+.tile .cw{pointer-events:none}
+.done{align-items:center;text-align:center}
+.done .center{gap:22px}
+.badge{width:min(52vw,210px);aspect-ratio:1;border-radius:50%;background:var(--peach);color:var(--ink);display:grid;place-items:center;animation:hush 2.4s ease both}
+.badge svg{width:46%;height:46%;fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.done h2{font-size:2rem;max-width:12em}
+.done .actions{width:100%}
+@keyframes hush{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){.badge{animation:none}}
+.about p{margin-bottom:12px}
+.about ul{padding-left:0;list-style:none;margin:0 0 12px;display:flex;flex-direction:column;gap:10px}
+.about li{display:flex;gap:12px;align-items:center}
+.about .tg{flex:none;width:34px;height:34px;border-color:var(--paper)}
+.about .tg svg{width:20px;height:20px;stroke:var(--paper)}
+.about a{color:var(--peach)}
+@media (prefers-reduced-motion:reduce){
+  .boost{animation:none}
+  .flip .face{transition:opacity .3s}
+  .flip .f-back,.flip .f-front{transform:none}
+  .flip .f-front{opacity:0}
+  .flip.shown .f-back{opacity:0;transform:none}
+  .flip.shown .f-front{opacity:1;transform:none}
+  .knob,.knob::after{transition:none}
+}
+</style>
+</head>
+<body>
+<main id="app">
+
+<section id="s-home" class="screen" aria-labelledby="h-home">
+  <div class="top"><span class="brand" id="h-home">Sleep Wind-Down Deck</span><button class="link" data-go="about">About</button></div>
+  <div class="center">
+    <button class="boost" id="boost" aria-label="Rest button. Press to draw a card">REST</button>
+    <p class="hint">press once, then go slowly</p>
+  </div>
+  <label class="toggle"><input type="checkbox" id="pub"><span class="knob" aria-hidden="true"></span>
+    <span><b>In bed only</b><small>Only cards you can do lying down</small></span></label>
+  <div class="row">
+    <button class="btn" id="quick">Quick one<br><small>under 1 minute</small></button>
+    <button class="btn" id="long">Bigger one<br><small>2 to 5 minutes</small></button>
+    <button class="btn full" data-go="deck">All 80 cards</button>
+  </div>
+</section>
+
+<section id="s-card" class="screen" hidden aria-label="Your card">
+  <div class="top"><button class="link" id="cardBack">Back</button><span class="brand" id="cardKind"></span></div>
+  <div class="stage"><div class="flip" id="flip"><div class="face f-back" id="fBack"></div><div class="face f-front" id="fFront"></div></div></div>
+  <div class="dots" id="dots" hidden></div>
+  <div class="timer" id="timer"></div>
+  <p class="msg" id="msg" role="status"></p>
+  <div class="actions" id="actions"></div>
+</section>
+
+<section id="s-deck" class="screen" hidden aria-label="All cards">
+  <div class="top"><button class="link" data-go="home">Back</button><span class="brand">All 80 cards</span></div>
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section id="s-done" class="screen done" hidden aria-labelledby="h-done">
+  <div class="top"><span class="brand">Sleep Wind-Down Deck</span><span></span></div>
+  <div class="center">
+    <div class="badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg></div>
+    <h2 id="h-done"></h2>
+    <p class="hint" id="doneSub"></p>
+  </div>
+  <div class="actions"><button class="btn primary" id="dAgain">One more card</button><button class="btn" id="dHome">Back to start</button></div>
+</section>
+
+<section id="s-about" class="screen about" hidden aria-labelledby="h-about">
+  <div class="top"><button class="link" data-go="home">Back</button><span class="brand">About</span></div>
+  <h2 id="h-about">How this works</h2>
+  <p>Press the button and you get one card. Do the small thing. Not feeling it? Draw another. There are no wrong cards.</p>
+  <ul>
+    <li><span class="tg" id="ic-b"></span><span><b>In bed</b>: works lying down, eyes closed, nothing to get up for.</span></li>
+    <li><span class="tg" id="ic-a"></span><span><b>Evening</b>: for the hour before bed, a few steps or a light.</span></li>
+    <li><span class="tg" id="ic-t"></span><span><b>Needs a thing</b>: a glass, a pen, paper, a blanket.</span></li>
+  </ul>
+  <p>Five suits of 16: <b>Breathe</b>, <b>Body</b>, <b>Mind</b>, <b>Room</b> and <b>Night</b> (for when you wake up). Each card takes from 1 to 15 minutes. Go slowly.</p>
+  <p>Sleep Wind-Down Deck is a set of small, calm ideas for winding down. It is not medical advice or treatment, and it does not cure insomnia or any sleep problem. If trouble sleeping lasts more than a few weeks, or you feel very low or anxious, please talk to your doctor.</p>
+  <p class="small">No account, no tracking. The only thing saved is your "In bed only" switch, on this device.</p>
+</section>
+
+</main>
+
+<script>
+const DATA = {
+  "deck": "Sleep Wind-Down Deck",
+  "button": "REST",
+  "short": "Wind-Down Deck",
+  "slug": "sleep-deck",
+  "fileSlug": "SleepDeck",
+  "tagline": "80 quiet cards for bedtime and for 2 a.m. Draw one, do one small thing.",
+  "format": "Poker 63x88 mm, bleed 3 mm, 300 dpi",
+  "tags": {
+    "b": "In bed - works lying down, eyes closed, nothing to get up for",
+    "a": "Evening - for the hour before bed, a few steps or a light",
+    "t": "Needs a thing - a glass, a pen, paper, a blanket"
+  },
+  "suits": [
+    {
+      "id": "breathe",
+      "name": "Breathe",
+      "shape": "rings",
+      "pal": {
+        "bg": "#C9D5F2",
+        "l": "#DCE5F7",
+        "d": "#B7C6EA",
+        "a": "#F6E6B8"
+      },
+      "cards": [
+        {
+          "n": 1,
+          "title": "Slow Out",
+          "text": "Breathe in for four. Breathe out for six. Repeat five times.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 2,
+          "title": "Soft Square",
+          "text": "In for four, hold four, out for four, hold four. Keep it gentle.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 3,
+          "title": "Big Sigh",
+          "text": "Breathe in deeply. Let it out with a long sigh. Do it three times.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 4,
+          "title": "Belly Rise",
+          "text": "Rest a hand on your belly. Feel it rise and fall.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 5,
+          "title": "Count Ten",
+          "text": "Count ten slow breaths. If you lose count, start again. No rush.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 6,
+          "title": "Nose Only",
+          "text": "Breathe in and out through your nose. Keep it quiet and easy.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 7,
+          "title": "Hum Out",
+          "text": "Hum softly on each breath out. Feel the buzz in your chest.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 8,
+          "title": "Longer Out",
+          "text": "Make each breath out a little longer than the one before.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 9,
+          "title": "Trace a Square",
+          "text": "Picture a square. Trace one side with each slow breath.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 10,
+          "title": "Wave Breath",
+          "text": "Picture a wave. It comes in as you breathe in and rolls out as you breathe out.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 11,
+          "title": "Soft Jaw",
+          "text": "Let your lips part and your jaw drop. Breathe out slowly.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 12,
+          "title": "Warm Air",
+          "text": "Breathe out onto your hands, as if warming them. Slowly.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 13,
+          "title": "Little Pause",
+          "text": "After each breath out, wait a moment. Do not force the next one.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 14,
+          "title": "Count Back",
+          "text": "Count back from ten, one number with each breath out.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 15,
+          "title": "Cool, Then Warm",
+          "text": "Notice the cool air coming in and the warm air going out.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 16,
+          "title": "Last Breath",
+          "text": "Take one more slow breath. Let your shoulders drop as it leaves.",
+          "time": "1 min",
+          "tag": "b"
+        }
+      ]
+    },
+    {
+      "id": "body",
+      "name": "Body",
+      "shape": "waves",
+      "pal": {
+        "bg": "#DCCFEC",
+        "l": "#E9E0F4",
+        "d": "#CDBDE3",
+        "a": "#F6E6B8"
+      },
+      "cards": [
+        {
+          "n": 1,
+          "title": "Toe Curl",
+          "text": "Curl your toes tight. Hold for five seconds, then let go.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 2,
+          "title": "Jaw Drop",
+          "text": "Unclench your jaw. Let your tongue rest on the floor of your mouth.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 3,
+          "title": "Shoulders Down",
+          "text": "Lift your shoulders to your ears. Drop them. Do it three times.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 4,
+          "title": "Fist Release",
+          "text": "Make two fists. Squeeze, then open your hands slowly.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 5,
+          "title": "Body Scan",
+          "text": "Start at your toes. Move your attention up, one part at a time.",
+          "time": "5 min",
+          "tag": "b"
+        },
+        {
+          "n": 6,
+          "title": "Heavy Legs",
+          "text": "Let your legs feel heavy. Let the bed hold them.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 7,
+          "title": "Soft Face",
+          "text": "Relax your forehead, then your eyes, then your cheeks.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 8,
+          "title": "Warm Shower",
+          "text": "Take a warm bath or shower about an hour before bed.",
+          "time": "15 min",
+          "tag": "a"
+        },
+        {
+          "n": 9,
+          "title": "Foot Rub",
+          "text": "Rub lotion into your feet. Press into the arches.",
+          "time": "3 min",
+          "tag": "t"
+        },
+        {
+          "n": 10,
+          "title": "Neck Roll",
+          "text": "Slowly roll your head from side to side. Stop if anything hurts.",
+          "time": "1 min",
+          "tag": "a"
+        },
+        {
+          "n": 11,
+          "title": "Child’s Pose",
+          "text": "Kneel and rest your forehead down. Stay for a few breaths.",
+          "time": "2 min",
+          "tag": "a"
+        },
+        {
+          "n": 12,
+          "title": "Legs Up",
+          "text": "Rest your legs up the wall, or on pillows, for two minutes.",
+          "time": "2 min",
+          "tag": "a"
+        },
+        {
+          "n": 13,
+          "title": "Warm Socks",
+          "text": "Put on a pair of warm, soft socks.",
+          "time": "1 min",
+          "tag": "t"
+        },
+        {
+          "n": 14,
+          "title": "Warm Pack",
+          "text": "Rest a warm, not hot, pack on your belly or feet.",
+          "time": "5 min",
+          "tag": "t"
+        },
+        {
+          "n": 15,
+          "title": "Side Stretch",
+          "text": "Reach one arm overhead and lean gently to the side. Switch.",
+          "time": "1 min",
+          "tag": "a"
+        },
+        {
+          "n": 16,
+          "title": "Press, Release",
+          "text": "Press your palms together hard for five seconds. Let go.",
+          "time": "1 min",
+          "tag": "b"
+        }
+      ]
+    },
+    {
+      "id": "mind",
+      "name": "Mind",
+      "shape": "phase",
+      "pal": {
+        "bg": "#BFDDE3",
+        "l": "#D6EBEF",
+        "d": "#AACFD7",
+        "a": "#F6E6B8"
+      },
+      "cards": [
+        {
+          "n": 1,
+          "title": "Brain Dump",
+          "text": "Write down everything on your mind. Close the notebook.",
+          "time": "5 min",
+          "tag": "t"
+        },
+        {
+          "n": 2,
+          "title": "Tomorrow List",
+          "text": "Write three things for tomorrow. That is enough.",
+          "time": "3 min",
+          "tag": "t"
+        },
+        {
+          "n": 3,
+          "title": "Worry Note",
+          "text": "Write one worry on paper. Fold it up. It can wait until morning.",
+          "time": "3 min",
+          "tag": "t"
+        },
+        {
+          "n": 4,
+          "title": "Good Three",
+          "text": "Think of three small good things from today.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 5,
+          "title": "Slow Story",
+          "text": "Make up a slow, simple, kind story. Let it wander.",
+          "time": "5 min",
+          "tag": "b"
+        },
+        {
+          "n": 6,
+          "title": "Letter Foods",
+          "text": "Pick a letter. Name foods that start with it, slowly.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 7,
+          "title": "Safe Place",
+          "text": "Picture a place where you feel calm. Look around it slowly.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 8,
+          "title": "Quiet Thanks",
+          "text": "Silently thank one person. Say what you are grateful for.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 9,
+          "title": "Not Now",
+          "text": "When a thought pops up, say “not now” and go back to your breath.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 10,
+          "title": "Cloud Drift",
+          "text": "Picture each thought as a cloud. Watch it drift away.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 11,
+          "title": "Calm Walk",
+          "text": "Replay a calm walk in your mind. Notice sounds and smells.",
+          "time": "4 min",
+          "tag": "b"
+        },
+        {
+          "n": 12,
+          "title": "Count by Threes",
+          "text": "Count backward from 100 by threes. Slowly.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 13,
+          "title": "Enough Today",
+          "text": "Say to yourself: “I did enough today.”",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 14,
+          "title": "One Soft Word",
+          "text": "Pick a soft word. Say it silently with each breath out.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 15,
+          "title": "Dream Room",
+          "text": "Design your dream bedroom in your head, down to the small details.",
+          "time": "4 min",
+          "tag": "b"
+        },
+        {
+          "n": 16,
+          "title": "One Line",
+          "text": "Write one line about today, good or bad. Close the book.",
+          "time": "3 min",
+          "tag": "t"
+        }
+      ]
+    },
+    {
+      "id": "room",
+      "name": "Room",
+      "shape": "stack",
+      "pal": {
+        "bg": "#EBDCC8",
+        "l": "#F3E9DB",
+        "d": "#E0CDB4",
+        "a": "#F6E6B8"
+      },
+      "cards": [
+        {
+          "n": 1,
+          "title": "Dim Light",
+          "text": "Turn off the big light. Use one soft lamp.",
+          "time": "1 min",
+          "tag": "a"
+        },
+        {
+          "n": 2,
+          "title": "Last Scroll",
+          "text": "Pick a time for your last scroll. Set an alarm for it.",
+          "time": "1 min",
+          "tag": "a"
+        },
+        {
+          "n": 3,
+          "title": "Cool Room",
+          "text": "Open a window or lower the heat a little. Cool rooms feel cozy.",
+          "time": "2 min",
+          "tag": "a"
+        },
+        {
+          "n": 4,
+          "title": "Dark Room",
+          "text": "Close the curtains. Cover any bright little lights.",
+          "time": "3 min",
+          "tag": "a"
+        },
+        {
+          "n": 5,
+          "title": "Fresh Bed",
+          "text": "Smooth the sheets and fluff the pillow. Make the bed look inviting.",
+          "time": "3 min",
+          "tag": "a"
+        },
+        {
+          "n": 6,
+          "title": "Quiet Sound",
+          "text": "Play soft rain or a fan. Keep it low.",
+          "time": "2 min",
+          "tag": "t"
+        },
+        {
+          "n": 7,
+          "title": "Extra Blanket",
+          "text": "Put a spare blanket within reach, just in case.",
+          "time": "2 min",
+          "tag": "a"
+        },
+        {
+          "n": 8,
+          "title": "Water Glass",
+          "text": "Fill a glass of water and put it by the bed.",
+          "time": "2 min",
+          "tag": "t"
+        },
+        {
+          "n": 9,
+          "title": "Tidy Corner",
+          "text": "Clear one small spot in your bedroom.",
+          "time": "3 min",
+          "tag": "a"
+        },
+        {
+          "n": 10,
+          "title": "Scent Tissue",
+          "text": "Put a drop of a scent you like on a tissue. Keep it by the bed.",
+          "time": "1 min",
+          "tag": "t"
+        },
+        {
+          "n": 11,
+          "title": "Phone Parking",
+          "text": "Plug your phone in across the room.",
+          "time": "1 min",
+          "tag": "a"
+        },
+        {
+          "n": 12,
+          "title": "Pillow Fix",
+          "text": "Adjust your pillow until your neck feels supported.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 13,
+          "title": "Eye Mask",
+          "text": "Try an eye mask, or a soft dark cloth over your eyes.",
+          "time": "1 min",
+          "tag": "t"
+        },
+        {
+          "n": 14,
+          "title": "Paper Book",
+          "text": "Read a few pages of a calm paper book.",
+          "time": "10 min",
+          "tag": "t"
+        },
+        {
+          "n": 15,
+          "title": "Clock Away",
+          "text": "Turn the clock face away from you.",
+          "time": "1 min",
+          "tag": "a"
+        },
+        {
+          "n": 16,
+          "title": "Soft Door",
+          "text": "Close the door gently. This room is for rest now.",
+          "time": "1 min",
+          "tag": "a"
+        }
+      ]
+    },
+    {
+      "id": "night",
+      "name": "Night",
+      "shape": "land",
+      "pal": {
+        "bg": "#C5CFE6",
+        "l": "#D9E0F1",
+        "d": "#B2BEDB",
+        "a": "#F6E6B8"
+      },
+      "cards": [
+        {
+          "n": 1,
+          "title": "It Is Okay",
+          "text": "Being awake for a while is okay. Rest your body and breathe.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 2,
+          "title": "No Clock",
+          "text": "Do not check the time. Leave the clock alone.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 3,
+          "title": "Soft Eyes",
+          "text": "Keep your eyes closed, or half closed. Keep the room dim.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 4,
+          "title": "Same Breath",
+          "text": "Go back to slow breathing. In for four, out for six.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 5,
+          "title": "Quiet Sips",
+          "text": "Take a few small sips of water. Then settle back down.",
+          "time": "2 min",
+          "tag": "t"
+        },
+        {
+          "n": 6,
+          "title": "Low Light",
+          "text": "If you get up, use only a dim light. Keep it quiet.",
+          "time": "2 min",
+          "tag": "a"
+        },
+        {
+          "n": 7,
+          "title": "Paper by Bed",
+          "text": "Write the thought down. It will keep until morning.",
+          "time": "2 min",
+          "tag": "t"
+        },
+        {
+          "n": 8,
+          "title": "Still Is Rest",
+          "text": "Lying still and quiet is a kind of rest too.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 9,
+          "title": "Sink In",
+          "text": "Let your body sink into the mattress, one part at a time.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 10,
+          "title": "Cool Side",
+          "text": "Turn your pillow over to the cool side.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 11,
+          "title": "Slow Story",
+          "text": "Tell yourself a slow story. Stop when it gets fuzzy.",
+          "time": "5 min",
+          "tag": "b"
+        },
+        {
+          "n": 12,
+          "title": "Hand on Heart",
+          "text": "Put a hand on your chest. Feel it rise and fall.",
+          "time": "2 min",
+          "tag": "b"
+        },
+        {
+          "n": 13,
+          "title": "Count from 50",
+          "text": "Count back from 50, one number with each breath out.",
+          "time": "3 min",
+          "tag": "b"
+        },
+        {
+          "n": 14,
+          "title": "Change Sides",
+          "text": "Roll to your other side. Get comfy again.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 15,
+          "title": "Soft Stretch",
+          "text": "Stretch your arms and legs gently, then let them go.",
+          "time": "1 min",
+          "tag": "b"
+        },
+        {
+          "n": 16,
+          "title": "Reset Break",
+          "text": "Awake a long time? Get up. Read something calm in dim light.",
+          "time": "10 min",
+          "tag": "t"
+        }
+      ]
+    }
+  ],
+  "extras": [
+    {
+      "id": "howto",
+      "title": "How to Use",
+      "text": "Draw one card. Do the small thing, slowly. There are no wrong cards. Scan the code on the back to open the app."
+    }
+  ]
+};
+const TAG = {
+  b:{label:'In bed',d:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'},
+  a:{label:'Evening',d:'<path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/>'},
+  t:{label:'Needs a thing',d:'<path d="M4 8l8-4 8 4v8l-8 4-8-4z"/><path d="M4 8l8 4 8-4M12 12v8"/>'}
+};
+const svgIcon=d=>'<svg viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const PAL=Object.fromEntries(DATA.suits.map(s=>[s.id,s.pal]));
+const SH=Object.fromEntries(DATA.suits.map(s=>[s.id,s.shape]));
+/* ---- abstract shapes, one pattern per suit, varied by card number (same as the printed cards) ---- */
+const rng=seed=>{let s=seed*7919+104729;return()=>{s=(s*9301+49297)%233280;return s/233280}};
+const wave=(y,amp,ph,fill,cyc)=>{let d=`M-6 ${y}`;for(let x=-6;x<=70;x+=1.5)d+=` L${x} ${(y+amp*Math.sin(x/63*Math.PI*2*cyc+ph)).toFixed(2)}`;return `<path d="${d} V98 H-6Z" fill="${fill}"/>`};
+const C=(x,y,r,f)=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${f}"/>`;
+let clipN=0;
+function shapes(id,n){
+  const P=PAL[id], r=rng(n+id.length*13), top=C(58,5,17,P.l)+C(58,5,9,P.bg);
+  if(SH[id]==='rings'){const cx=14+r()*36, cy=90+r()*8, s=.7+n*.03; let o='';[[58,P.l],[46,P.d],[34,P.l],[23,P.d],[12,P.a]].forEach(([rad,f])=>o+=C(cx,cy,rad*s,f));return top+o}
+  if(SH[id]==='stack'){const k=3+Math.ceil(n/6), cols=[P.d,P.l,P.d,P.a,P.d]; let y=90,o='';
+    for(let i=0;i<k;i++){const w=Math.max(16,46-i*8),h=7.2,x=(8+r()*26)+(46-w)/2-6;o+=`<rect x="${x.toFixed(1)}" y="${(y-h).toFixed(1)}" width="${w}" height="${h+6}" rx="3.6" fill="${cols[i%5]}"/>`;y-=h*.82}return top+o}
+  if(SH[id]==='phase'){const dx=(n-8.5)*3.2,id2='mc'+(++clipN);return top+C(36,70,26,P.l)+`<clipPath id="${id2}"><circle cx="36" cy="70" r="26"/></clipPath><g clip-path="url(#${id2})">${C(36+dx,70,26,P.d)}</g>`+C(14,60,3,P.a)}
+  if(SH[id]==='land'){const rr=7+n*.9;return top+C(36,74,rr,P.a)+`<rect x="-6" y="74" width="76" height="24" fill="${P.d}"/><rect x="-6" y="80" width="76" height="18" fill="${P.l}"/><rect x="-6" y="85" width="76" height="13" fill="${P.d}"/>`}
+  return top+wave(66,2+(n%5)*.7,n*.6,P.l,2)+wave(74,2.4+(n%4)*.6,n*.5+1.5,P.d,2.5)+wave(82,2.6,n*.4+3,P.a,3);
+}
+function cardHTML(s,c){const t=TAG[c.tag];
+  return `<div class="cw"><article class="card" style="--bg:${PAL[s.id].bg}" aria-label="${esc(s.name)} ${c.n}: ${esc(c.title)}">
+  <svg class="bgart" viewBox="0 0 63 88" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${shapes(s.id,c.n)}</svg><div class="grainov"></div>
+  <div class="in"><div class="hd"><span class="nm">${s.name}</span><span class="no">${c.n}</span></div>
+  <div class="ttl">${esc(c.title)}</div><div class="txt">${esc(c.text)}</div><div class="sp"></div>
+  <div class="ft"><span class="pill">${c.time}</span><span class="tg" role="img" aria-label="${t.label}">${svgIcon(t.d)}</span></div></div></article></div>`}
+const backHTML=()=>`<div class="cw"><div class="back"><svg viewBox="0 0 63 88" aria-hidden="true"><rect width="63" height="88" fill="#1F2A44"/>
+  <circle cx="0" cy="0" r="22" fill="${DATA.suits[0].pal.bg}"/><circle cx="63" cy="0" r="22" fill="${DATA.suits[1].pal.bg}"/><circle cx="0" cy="88" r="22" fill="${DATA.suits[2].pal.bg}"/><circle cx="63" cy="88" r="22" fill="${DATA.suits[3].pal.bg}"/>
+  <circle cx="31.5" cy="44" r="22" fill="${DATA.suits[4].pal.bg}" fill-opacity=".3"/><circle cx="31.5" cy="44" r="15" fill="#F7D58B"/>
+  <text x="31.5" y="46.3" text-anchor="middle" font-family="DM Sans,sans-serif" font-weight="700" font-size="5.6" fill="#2C3956" letter-spacing=".5">${DATA.button}</text></svg></div></div>`;
+
+/* ---- grain tile, made once ---- */
+(function(){try{const c=document.createElement('canvas');c.width=c.height=200;const x=c.getContext('2d'),im=x.createImageData(200,200);
+  for(let i=0;i<40000;i++){im.data[i*4]=44;im.data[i*4+1]=57;im.data[i*4+2]=86;im.data[i*4+3]=Math.pow(Math.random(),1.8)*.13*255}
+  x.putImageData(im,0,0);document.documentElement.style.setProperty('--grain',`url(${c.toDataURL()})`)}catch(e){}})();
+
+/* ---- helpers ---- */
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ALL=DATA.suits.flatMap(s=>s.cards.map(c=>({s,c})));
+const keyOf=x=>x.s.id+x.c.n;
+const secOf=c=>{const m=/^(\d+)\s*(sec|min)/.exec(c.time);return m?+m[1]*(m[2]==='min'?60:1):60};
+const state={pub:false,hist:[],cur:null,mode:'any',suit:DATA.suits[0].id};
+try{state.pub=localStorage.getItem('sd.bed')==='1'}catch(e){}
+$('pub').checked=state.pub;
+$('pub').onchange=e=>{state.pub=e.target.checked;try{localStorage.setItem('sd.bed',state.pub?'1':'0')}catch(err){}};
+
+function pick(kind){
+  let pool=ALL.filter(x=>(!state.pub||x.c.tag==='b')&&(kind==='quick'?secOf(x.c)<=60:kind==='long'?secOf(x.c)>=120:true));
+  if(!pool.length)pool=ALL;
+  const fresh=pool.filter(x=>!state.hist.includes(keyOf(x)));
+  if(fresh.length)pool=fresh;else state.hist=[];
+  const x=pool[Math.floor(Math.random()*pool.length)];state.hist.push(keyOf(x));if(state.hist.length>40)state.hist.shift();return x;
+}
+
+/* ---- screens ---- */
+const screens=['home','card','deck','about','done'];
+function show(name,push){
+  screens.forEach(n=>$('s-'+n).hidden=n!==name);
+  if(name!=='card')stopTimer(true);
+  if(push!==false&&location.hash!=='#'+name){try{history.pushState(null,'','#'+name)}catch(e){}}
+  window.scrollTo(0,0);
+  const h=$('s-'+name).querySelector('h1,h2,.brand');if(h){h.setAttribute('tabindex','-1');h.focus({preventScroll:true})}
+}
+addEventListener('popstate',()=>{const n=location.hash.slice(1);show(screens.includes(n)&&(n!=='card'||state.cur)?n:'home',false)});
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const n=b.dataset.go;if(n==='deck')renderDeck();show(n)});
+$('ic-b').innerHTML=svgIcon(TAG.b.d);$('ic-a').innerHTML=svgIcon(TAG.a.d);$('ic-t').innerHTML=svgIcon(TAG.t.d);
+
+/* ---- card screen ---- */
+function openCard(x,kind){
+  state.cur=x;
+  $('fBack').innerHTML=backHTML();$('fFront').innerHTML=cardHTML(x.s,x.c);
+  const fl=$('flip');fl.classList.remove('shown');
+  show('card');
+  $('cardKind').textContent=kind||'';
+  $('msg').textContent='';
+  $('dots').hidden=true;
+  stopTimer(true);renderTimer();renderActions();
+  setTimeout(()=>fl.classList.add('shown'),reduce?20:120);
+}
+function renderActions(){
+  const a=$('actions');let h='';
+  if(state.mode==='open')h+=`<button class="btn primary" id="aDeck">Back to all cards</button>`;
+  else h+=`<button class="btn primary" id="aMore">Another card</button>`;
+  h+=`<button class="btn" id="aHome">I am done for now</button>`;
+  a.innerHTML=h;
+  const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
+  on('aMore',()=>draw(state.mode));
+  on('aDeck',()=>show('deck'));
+  on('aHome',()=>showDone());
+}
+function draw(kind){state.mode=kind||'any';openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':'')}
+$('boost').onclick=()=>draw('any');$('quick').onclick=()=>draw('quick');$('long').onclick=()=>draw('long');
+$('cardBack').onclick=()=>{state.mode==='open'?show('deck'):show('home')};
+
+/* ---- "I am done for now": a quiet goodbye ---- */
+const PRAISE=[
+  ['Sleep well.','Nothing more to do.'],
+  ['Rest now.','You did enough today.'],
+  ['Good night.','Let the day be done.'],
+  ['Easy does it.','Soft and slow is plenty.'],
+  ['Take your time.','There is no hurry to sleep.'],
+  ['Quiet now.','You can come back anytime.']
+];
+let lastPraise=-1;
+function showDone(){
+  let i;do{i=Math.floor(Math.random()*PRAISE.length)}while(PRAISE.length>1&&i===lastPraise);lastPraise=i;
+  $('h-done').textContent=PRAISE[i][0];$('doneSub').textContent=PRAISE[i][1];
+  const b=document.querySelector('#s-done .badge');if(b){b.style.animation='none';void b.offsetWidth;b.style.animation=''}
+  show('done');
+}
+$('dAgain').onclick=()=>draw(state.mode==='open'?'any':state.mode);
+$('dHome').onclick=()=>show('home');
+
+/* ---- timer ---- */
+let tm=null,wl=null;
+async function lock(){try{wl=await navigator.wakeLock.request('screen')}catch(e){}}
+function unlock(){try{wl&&wl.release()}catch(e){}wl=null}
+function fmt(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function renderTimer(){
+  const t=$('timer'),total=secOf(state.cur.c);
+  t.innerHTML=`<button class="btn" id="tStart">Start ${state.cur.c.time} timer</button>`;
+  $('tStart').onclick=()=>startTimer(total);
+}
+function startTimer(total){
+  const R=34,Cc=2*Math.PI*R,end=Date.now()+total*1000;
+  $('timer').innerHTML=`<div class="ring"><svg viewBox="0 0 76 76" aria-hidden="true"><circle class="bg" cx="38" cy="38" r="${R}"/><circle class="fg" id="tFg" cx="38" cy="38" r="${R}" stroke-dasharray="${Cc}" stroke-dashoffset="0"/></svg><span id="tTxt">${fmt(total)}</span></div><button class="btn" id="tStop">Stop</button>`;
+  $('tStop').onclick=()=>{stopTimer(true);renderTimer()};
+  lock();
+  const tick=()=>{const left=(end-Date.now())/1000;
+    $('tTxt').textContent=fmt(left);$('tFg').setAttribute('stroke-dashoffset',String(Cc*(1-Math.max(0,left)/total)));
+    if(left<=0){stopTimer(true);$('timer').innerHTML=`<button class="btn" id="tStart">Run it again</button>`;$('tStart').onclick=()=>startTimer(total);$('msg').textContent="Time's up. Another card, or just rest here for a while."}};
+  tm=setInterval(tick,250);tick();
+}
+function stopTimer(quiet){if(tm){clearInterval(tm);tm=null}unlock();if(!quiet)$('msg').textContent=''}
+
+/* ---- all cards ---- */
+function renderDeck(){
+  const tabs=$('tabs');
+  tabs.innerHTML=DATA.suits.map(s=>`<button class="tab" role="tab" data-s="${s.id}" aria-selected="${s.id===state.suit}"><i style="background:${PAL[s.id].bg}"></i>${s.name}</button>`).join('');
+  tabs.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{state.suit=b.dataset.s;renderDeck()});
+  const s=DATA.suits.find(x=>x.id===state.suit);
+  $('grid').innerHTML=s.cards.map(c=>`<button class="tile" data-n="${c.n}" aria-label="Open ${esc(s.name)} ${c.n}: ${esc(c.title)}">${cardHTML(s,c)}</button>`).join('');
+  $('grid').querySelectorAll('.tile').forEach(t=>t.onclick=()=>{state.mode='open';openCard({s,c:s.cards.find(c=>c.n===+t.dataset.n)},s.name)});
+}
+
+if('serviceWorker' in navigator&&location.protocol!=='file:'&&!/__NOSW__/.test('sw')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+show('home',false);
+</script>
+</body></html>
