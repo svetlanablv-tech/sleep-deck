@@ -110,6 +110,8 @@ p{margin:0}
 .tab{flex:none;min-height:44px;padding:8px 16px;border-radius:99px;border:1.5px solid var(--line);background:transparent;font-family:var(--font-display);font-weight:700;display:flex;gap:8px;align-items:center}
 .tab[aria-selected="true"]{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .tab i{width:14px;height:14px;border-radius:50%;display:block}
+.suitpick{display:flex;flex-direction:column;gap:8px}
+.suitpick .tabs{flex-wrap:wrap;overflow:visible}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .tile{border:0;background:none;padding:0;aspect-ratio:63/88;border-radius:5cqw;text-align:left}
 .tile .cw{pointer-events:none}
@@ -147,6 +149,7 @@ p{margin:0}
     <button class="boost" id="boost" aria-label="Rest button. Press to draw a card">REST</button>
     <p class="hint">press once, then go slowly</p>
   </div>
+  <div class="suitpick"><span class="small">Or pick a suit</span><div class="tabs" id="hsuits"></div></div>
   <label class="toggle"><input type="checkbox" id="pub"><span class="knob" aria-hidden="true"></span>
     <span><b>In bed only</b><small>Only cards you can do lying down</small></span></label>
   <div class="row">
@@ -891,13 +894,13 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ALL=DATA.suits.flatMap(s=>s.cards.map(c=>({s,c})));
 const keyOf=x=>x.s.id+x.c.n;
 const secOf=c=>{const m=/^(\d+)\s*(sec|min)/.exec(c.time);return m?+m[1]*(m[2]==='min'?60:1):60};
-const state={pub:false,hist:[],cur:null,mode:'any',suit:DATA.suits[0].id};
+const state={pub:false,hist:[],cur:null,mode:'any',suit:DATA.suits[0].id,only:null};
 try{state.pub=localStorage.getItem('sd.bed')==='1'}catch(e){}
 $('pub').checked=state.pub;
 $('pub').onchange=e=>{state.pub=e.target.checked;try{localStorage.setItem('sd.bed',state.pub?'1':'0')}catch(err){}};
 
 function pick(kind){
-  let pool=ALL.filter(x=>(!state.pub||x.c.tag==='b')&&(kind==='quick'?secOf(x.c)<=60:kind==='long'?secOf(x.c)>=120:true));
+  let pool=ALL.filter(x=>(!state.only||x.s.id===state.only)&&(!state.pub||x.c.tag==='b')&&(kind==='quick'?secOf(x.c)<=60:kind==='long'?secOf(x.c)>=120:true));
   if(!pool.length)pool=ALL;
   const fresh=pool.filter(x=>!state.hist.includes(keyOf(x)));
   if(fresh.length)pool=fresh;else state.hist=[];
@@ -940,8 +943,10 @@ function renderActions(){
   on('aDeck',()=>show('deck'));
   on('aHome',()=>showDone());
 }
-function draw(kind){state.mode=kind||'any';openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':'')}
-$('boost').onclick=()=>draw('any');$('quick').onclick=()=>draw('quick');$('long').onclick=()=>draw('long');
+function draw(kind,suit){state.mode=kind||'any';if(suit!==undefined)state.only=suit;const sn=state.only?DATA.suits.find(x=>x.id===state.only).name:'';openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':sn)}
+$('hsuits').innerHTML=DATA.suits.map(s=>`<button class="tab" data-s="${s.id}"><i style="background:${PAL[s.id].bg}"></i>${s.name}</button>`).join('');
+$('hsuits').querySelectorAll('.tab').forEach(b=>b.onclick=()=>draw('any',b.dataset.s));
+$('boost').onclick=()=>draw('any',null);$('quick').onclick=()=>draw('quick',null);$('long').onclick=()=>draw('long',null);
 $('cardBack').onclick=()=>{state.mode==='open'?show('deck'):show('home')};
 
 /* ---- "I am done for now": a quiet goodbye ---- */
@@ -992,7 +997,7 @@ function renderDeck(){
   tabs.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{state.suit=b.dataset.s;renderDeck()});
   const s=DATA.suits.find(x=>x.id===state.suit);
   $('grid').innerHTML=s.cards.map(c=>`<button class="tile" data-n="${c.n}" aria-label="Open ${esc(s.name)} ${c.n}: ${esc(c.title)}">${cardHTML(s,c)}</button>`).join('');
-  $('grid').querySelectorAll('.tile').forEach(t=>t.onclick=()=>{state.mode='open';openCard({s,c:s.cards.find(c=>c.n===+t.dataset.n)},s.name)});
+  $('grid').querySelectorAll('.tile').forEach(t=>t.onclick=()=>{state.mode='open';state.only=null;openCard({s,c:s.cards.find(c=>c.n===+t.dataset.n)},s.name)});
 }
 
 if('serviceWorker' in navigator&&location.protocol!=='file:'&&!/__NOSW__/.test('sw')){navigator.serviceWorker.register('sw.js').catch(()=>{})}
