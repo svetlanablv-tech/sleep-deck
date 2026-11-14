@@ -110,8 +110,13 @@ p{margin:0}
 .tab{flex:none;min-height:44px;padding:8px 16px;border-radius:99px;border:1.5px solid var(--line);background:transparent;font-family:var(--font-display);font-weight:700;display:flex;gap:8px;align-items:center}
 .tab[aria-selected="true"]{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .tab i{width:14px;height:14px;border-radius:50%;display:block}
+#suitList .tg{border:0;width:auto;height:auto}
+#suitList i{flex:none;width:18px;height:18px;border-radius:50%;display:block;border:2px solid var(--paper)}
+.tab small{display:block;font-family:var(--font-body);font-weight:400;font-size:.8rem;opacity:.85;line-height:1.15}
+.tab.two{border-radius:16px;text-align:left;flex-direction:row}
 .suitpick{display:flex;flex-direction:column;gap:8px}
-.suitpick .tabs{flex-wrap:wrap;overflow:visible}
+.suitpick .tabs{display:grid;grid-template-columns:1fr 1fr;overflow:visible}
+.suitpick .tab{padding:8px 12px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .tile{border:0;background:none;padding:0;aspect-ratio:63/88;border-radius:5cqw;text-align:left}
 .tile .cw{pointer-events:none}
@@ -193,7 +198,8 @@ p{margin:0}
     <li><span class="tg" id="ic-a"></span><span><b>Evening</b>: for the hour before bed, a few steps or a light.</span></li>
     <li><span class="tg" id="ic-t"></span><span><b>Needs a thing</b>: a glass, a pen, paper, a blanket.</span></li>
   </ul>
-  <p>Five suits of 16: <b>Breathe</b>, <b>Body</b>, <b>Mind</b>, <b>Room</b> and <b>Night</b> (for when you wake up). Each card takes from 1 to 15 minutes. Go slowly.</p>
+  <p>Five suits of 16 cards. Each card takes from 1 to 15 minutes. Go slowly.</p>
+  <ul id="suitList"></ul>
   <p>Sleep Wind-Down Deck is a set of small, calm ideas for winding down. It is not medical advice or treatment, and it does not cure insomnia or any sleep problem. If trouble sleeping lasts more than a few weeks, or you feel very low or anxious, please talk to your doctor.</p>
   <p class="small">No account, no tracking. The only thing saved is your "In bed only" switch, on this device.</p>
 </section>
@@ -338,11 +344,12 @@ const DATA = {
           "time": "1 min",
           "tag": "b"
         }
-      ]
+      ],
+      "hint": "slow breaths, long sighs"
     },
     {
       "id": "body",
-      "name": "Body",
+      "name": "Loosen Up",
       "shape": "waves",
       "pal": {
         "bg": "#DCCFEC",
@@ -463,11 +470,12 @@ const DATA = {
           "time": "1 min",
           "tag": "b"
         }
-      ]
+      ],
+      "hint": "relax jaw, shoulders, legs"
     },
     {
       "id": "mind",
-      "name": "Mind",
+      "name": "Quiet Mind",
       "shape": "phase",
       "pal": {
         "bg": "#BFDDE3",
@@ -588,11 +596,12 @@ const DATA = {
           "time": "3 min",
           "tag": "t"
         }
-      ]
+      ],
+      "hint": "put the day’s thoughts down"
     },
     {
       "id": "room",
-      "name": "Room",
+      "name": "Set the Room",
       "shape": "stack",
       "pal": {
         "bg": "#EBDCC8",
@@ -713,11 +722,12 @@ const DATA = {
           "time": "1 min",
           "tag": "a"
         }
-      ]
+      ],
+      "hint": "light, air, phone away"
     },
     {
       "id": "night",
-      "name": "Night",
+      "name": "If You Wake",
       "shape": "land",
       "pal": {
         "bg": "#C5CFE6",
@@ -838,14 +848,15 @@ const DATA = {
           "time": "10 min",
           "tag": "t"
         }
-      ]
+      ],
+      "hint": "for 2 a.m., awake in the dark"
     }
   ],
   "extras": [
     {
       "id": "howto",
       "title": "How to Use",
-      "text": "Draw one card. Do the small thing, slowly. There are no wrong cards. Scan the code on the back to open the app."
+      "text": "Draw one card. Do the small thing, slowly. Scan the code on the back for the app."
     }
   ]
 };
@@ -944,7 +955,8 @@ function renderActions(){
   on('aHome',()=>showDone());
 }
 function draw(kind,suit){state.mode=kind||'any';if(suit!==undefined)state.only=suit;const sn=state.only?DATA.suits.find(x=>x.id===state.only).name:'';openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':sn)}
-$('hsuits').innerHTML=DATA.suits.map(s=>`<button class="tab" data-s="${s.id}"><i style="background:${PAL[s.id].bg}"></i>${s.name}</button>`).join('');
+$('hsuits').innerHTML=DATA.suits.map(s=>`<button class="tab two" data-s="${s.id}"><i style="background:${PAL[s.id].bg}"></i><span>${s.name}<small>${s.hint}</small></span></button>`).join('');
+$('suitList').innerHTML=DATA.suits.map(s=>`<li><i style="background:${PAL[s.id].bg}"></i><span><b>${s.name}</b>: ${s.hint}.</span></li>`).join('');
 $('hsuits').querySelectorAll('.tab').forEach(b=>b.onclick=()=>draw('any',b.dataset.s));
 $('boost').onclick=()=>draw('any',null);$('quick').onclick=()=>draw('quick',null);$('long').onclick=()=>draw('long',null);
 $('cardBack').onclick=()=>{state.mode==='open'?show('deck'):show('home')};
