@@ -46,6 +46,9 @@ p{margin:0}
   font-family:var(--font-display);font-weight:700;font-size:clamp(1.5rem,7vw,2rem);letter-spacing:.14em;
   box-shadow:0 0 0 14px rgba(247,213,139,.16),0 0 0 32px rgba(247,213,139,.08);}
 .boost:active{transform:scale(.97)}
+.boost{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35em}
+.boost .pl{width:32%;height:auto;fill:var(--ink)}
+.msg.ok{color:var(--paper);font-weight:700}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 14px rgba(247,213,139,.16),0 0 0 32px rgba(247,213,139,.08)}50%{box-shadow:0 0 0 20px rgba(247,213,139,.14),0 0 0 42px rgba(247,213,139,.06)}}
 .hint{color:var(--muted);text-align:center}
 .toggle{display:flex;gap:14px;align-items:center;background:var(--navy2);border-radius:16px;padding:14px 16px;cursor:pointer;min-height:64px}
@@ -151,7 +154,7 @@ p{margin:0}
 <section id="s-home" class="screen" aria-labelledby="h-home">
   <div class="top"><span class="brand" id="h-home">Sleep Wind-Down Deck</span><button class="link" data-go="about">About</button></div>
   <div class="center">
-    <button class="boost" id="boost" aria-label="Rest button. Press to draw a card">REST</button>
+    <button class="boost" id="boost" aria-label="Rest button. Press to draw a card"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg>REST</button>
     <p class="hint">press once, then go slowly</p>
   </div>
   <div class="suitpick"><span class="small">Or pick a suit</span><div class="tabs" id="hsuits"></div></div>
@@ -905,6 +908,14 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const ALL=DATA.suits.flatMap(s=>s.cards.map(c=>({s,c})));
 const keyOf=x=>x.s.id+x.c.n;
 const secOf=c=>{const m=/^(\d+)\s*(sec|min)/.exec(c.time);return m?+m[1]*(m[2]==='min'?60:1):60};
+const STEP={
+  breathe:['Slow and steady. Well done.','One calm breath at a time. Nice.','That was a good one.'],
+  body:['Your body says thank you.','Soft and loose. Well done.','You let something go. Nice.'],
+  mind:['One thought set down. Well done.','Your head can rest a little now.','Good. It can wait until morning.'],
+  room:['The room is ready. Well done.','A calm space, made by you.','Nicely done. Take your time.'],
+  night:['You stayed calm in the dark. Well done.','Easy does it. That was kind to yourself.','Well done. Just rest.']
+};
+const praise=()=>{const a=STEP[state.cur.s.id]||STEP.breathe;return a[Math.floor(Math.random()*a.length)]};
 const state={pub:false,hist:[],cur:null,mode:'any',suit:DATA.suits[0].id,only:null};
 try{state.pub=localStorage.getItem('sd.bed')==='1'}catch(e){}
 $('pub').checked=state.pub;
@@ -938,21 +949,23 @@ function openCard(x,kind){
   const fl=$('flip');fl.classList.remove('shown');
   show('card');
   $('cardKind').textContent=kind||'';
-  $('msg').textContent='';
+  $('msg').textContent='';$('msg').classList.remove('ok');
   $('dots').hidden=true;
   stopTimer(true);renderTimer();renderActions();
   setTimeout(()=>fl.classList.add('shown'),reduce?20:120);
 }
 function renderActions(){
   const a=$('actions');let h='';
-  if(state.mode==='open')h+=`<button class="btn primary" id="aDeck">Back to all cards</button>`;
-  else h+=`<button class="btn primary" id="aMore">Another card</button>`;
+  h+=`<button class="btn primary" id="aDid">I did it</button>`;
+  if(state.mode==='open')h+=`<button class="btn" id="aDeck">Back to all cards</button>`;
+  else h+=`<button class="btn" id="aMore">Another card</button>`;
   h+=`<button class="btn" id="aHome">I am done for now</button>`;
   a.innerHTML=h;
   const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
   on('aMore',()=>draw(state.mode));
   on('aDeck',()=>show('deck'));
   on('aHome',()=>showDone());
+  on('aDid',()=>{const m=$('msg');m.textContent=praise();m.classList.add('ok')});
 }
 function draw(kind,suit){state.mode=kind||'any';if(suit!==undefined)state.only=suit;const sn=state.only?DATA.suits.find(x=>x.id===state.only).name:'';openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':sn)}
 $('hsuits').innerHTML=DATA.suits.map(s=>`<button class="tab two" data-s="${s.id}"><i style="background:${PAL[s.id].bg}"></i><span>${s.name}<small>${s.hint}</small></span></button>`).join('');
@@ -997,7 +1010,7 @@ function startTimer(total){
   lock();
   const tick=()=>{const left=(end-Date.now())/1000;
     $('tTxt').textContent=fmt(left);$('tFg').setAttribute('stroke-dashoffset',String(Cc*(1-Math.max(0,left)/total)));
-    if(left<=0){stopTimer(true);$('timer').innerHTML=`<button class="btn" id="tStart">Run it again</button>`;$('tStart').onclick=()=>startTimer(total);$('msg').textContent="Time's up. Another card, or just rest here for a while."}};
+    if(left<=0){stopTimer(true);$('timer').innerHTML=`<button class="btn" id="tStart">Run it again</button>`;$('tStart').onclick=()=>startTimer(total);$('msg').textContent="Time's up. "+praise()+" Another card, or just rest here for a while.";$('msg').classList.add('ok')}};
   tm=setInterval(tick,250);tick();
 }
 function stopTimer(quiet){if(tm){clearInterval(tm);tm=null}unlock();if(!quiet)$('msg').textContent=''}
