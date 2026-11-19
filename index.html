@@ -115,11 +115,26 @@ p{margin:0}
 .tab i{width:14px;height:14px;border-radius:50%;display:block}
 #suitList .tg{border:0;width:auto;height:auto}
 #suitList i{flex:none;width:18px;height:18px;border-radius:50%;display:block;border:2px solid var(--paper)}
-.tab small{display:block;font-family:var(--font-body);font-weight:400;font-size:.8rem;opacity:.85;line-height:1.15}
-.tab.two{border-radius:16px;text-align:left;flex-direction:row}
-.suitpick{display:flex;flex-direction:column;gap:8px}
-.suitpick .tabs{display:grid;grid-template-columns:1fr 1fr;overflow:visible}
-.suitpick .tab{padding:8px 12px}
+.pick{display:flex;flex-direction:column;gap:8px;align-items:center}
+.lbl{color:var(--muted);font-size:.9rem}
+.schips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.schip{min-height:44px;border-radius:99px;border:1.5px solid var(--line);background:transparent;padding:6px 14px 6px 10px;font-family:var(--font-display);font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:8px}
+.schip i{width:16px;height:16px;border-radius:50%;flex:none}
+.schip:active{transform:scale(.97)}
+.moments{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.moments .btn{padding:8px 6px;font-size:.9rem}
+.moments .btn small{display:block;margin-top:2px;font-size:.75rem;line-height:1.2}
+/* short phones: keep the whole home screen in view, nothing to scroll for */
+@media (max-height:760px){
+  .screen{gap:10px;padding-block:6px 12px}
+  #s-home .center{gap:8px;padding-block:2px}
+  #s-home .boost{width:min(38vw,136px);box-shadow:0 0 0 8px rgba(247,213,139,.16),0 0 0 18px rgba(247,213,139,.08)}
+  .toggle{min-height:56px;padding:10px 14px}
+  .btn{min-height:46px;padding:8px 10px}
+  .moments .btn{min-height:56px}
+  .pick{gap:6px}
+  .schip{min-height:40px}
+}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .tile{border:0;background:none;padding:0;aspect-ratio:63/88;border-radius:5cqw;text-align:left}
 .tile .cw{pointer-events:none}
@@ -157,14 +172,15 @@ p{margin:0}
     <button class="boost" id="boost" aria-label="Rest button. Press to draw a card"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"/></svg>REST</button>
     <p class="hint">press once, then go slowly</p>
   </div>
-  <div class="suitpick"><span class="small">Or pick a suit</span><div class="tabs" id="hsuits"></div></div>
   <label class="toggle"><input type="checkbox" id="pub"><span class="knob" aria-hidden="true"></span>
     <span><b>In bed only</b><small>Only cards you can do lying down</small></span></label>
-  <div class="row">
-    <button class="btn" id="quick">Quick one<br><small>under 1 minute</small></button>
-    <button class="btn" id="long">Bigger one<br><small>2 to 5 minutes</small></button>
-    <button class="btn full" data-go="deck">All 80 cards</button>
+  <div class="moments" id="moments">
+    <button class="btn" id="mBefore">Before bed<small>light, room, body</small></button>
+    <button class="btn" id="mBed">In bed<small>breath and thoughts</small></button>
+    <button class="btn" id="mWake">Woke up<small>for 2 a.m.</small></button>
   </div>
+  <div class="pick"><div class="lbl" id="pickLbl">Or choose a suit</div><div class="schips" id="schips" role="group" aria-labelledby="pickLbl"></div></div>
+  <button class="btn full" data-go="deck">All 80 cards</button>
 </section>
 
 <section id="s-card" class="screen" hidden aria-label="Your card">
@@ -922,7 +938,7 @@ $('pub').checked=state.pub;
 $('pub').onchange=e=>{state.pub=e.target.checked;try{localStorage.setItem('sd.bed',state.pub?'1':'0')}catch(err){}};
 
 function pick(kind){
-  let pool=ALL.filter(x=>(!state.only||x.s.id===state.only)&&(!state.pub||x.c.tag==='b')&&(kind==='quick'?secOf(x.c)<=60:kind==='long'?secOf(x.c)>=120:true));
+  let pool=ALL.filter(x=>(!state.only||state.only.includes(x.s.id))&&(!state.pub||x.c.tag==='b')&&(kind==='quick'?secOf(x.c)<=60:kind==='long'?secOf(x.c)>=120:true));
   if(!pool.length)pool=ALL;
   const fresh=pool.filter(x=>!state.hist.includes(keyOf(x)));
   if(fresh.length)pool=fresh;else state.hist=[];
@@ -967,11 +983,12 @@ function renderActions(){
   on('aHome',()=>showDone());
   on('aDid',()=>{const m=$('msg');m.textContent=praise();m.classList.add('ok')});
 }
-function draw(kind,suit){state.mode=kind||'any';if(suit!==undefined)state.only=suit;const sn=state.only?DATA.suits.find(x=>x.id===state.only).name:'';openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':sn)}
-$('hsuits').innerHTML=DATA.suits.map(s=>`<button class="tab two" data-s="${s.id}"><i style="background:${PAL[s.id].bg}"></i><span>${s.name}<small>${s.hint}</small></span></button>`).join('');
+const MOMENTS={before:{label:'Before bed',suits:['room','body']},bed:{label:'In bed',suits:['breathe','mind']},wake:{label:'Woke up',suits:['night']}};
+function draw(kind,only){state.mode=kind||'any';if(only!==undefined)state.only=only;let lbl='';if(state.only){const m=Object.values(MOMENTS).find(x=>x.suits.join()===state.only.join());lbl=m?m.label:state.only.length===1?DATA.suits.find(x=>x.id===state.only[0]).name:''}openCard(pick(state.mode),state.mode==='quick'?'Quick one':state.mode==='long'?'Bigger one':lbl)}
+$('schips').innerHTML=DATA.suits.map(su=>`<button class="schip" data-suit="${su.id}"><i style="background:${PAL[su.id].bg}"></i>${su.name}</button>`).join('');
 $('suitList').innerHTML=DATA.suits.map(s=>`<li><i style="background:${PAL[s.id].bg}"></i><span><b>${s.name}</b>: ${s.hint}.</span></li>`).join('');
-$('hsuits').querySelectorAll('.tab').forEach(b=>b.onclick=()=>draw('any',b.dataset.s));
-$('boost').onclick=()=>draw('any',null);$('quick').onclick=()=>draw('quick',null);$('long').onclick=()=>draw('long',null);
+$('schips').querySelectorAll('.schip').forEach(b=>b.onclick=()=>draw('any',[b.dataset.suit]));
+$('boost').onclick=()=>draw('any',null);$('mBefore').onclick=()=>draw('any',MOMENTS.before.suits);$('mBed').onclick=()=>draw('any',MOMENTS.bed.suits);$('mWake').onclick=()=>draw('any',MOMENTS.wake.suits);
 $('cardBack').onclick=()=>{state.mode==='open'?show('deck'):show('home')};
 
 /* ---- "I am done for now": a quiet goodbye ---- */
